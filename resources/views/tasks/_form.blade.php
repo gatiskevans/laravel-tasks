@@ -30,7 +30,7 @@
     <div class="mb-4">
         <button
             class="mb-2 mx-16 rounded-full py-1 px-24 bg-gradient-to-r from-green-400 to-blue-500 ">
-            {{ $task === null ? 'Create' : 'Save' }}
+            {{ $task->exists ? 'Save' : 'Create' }}
         </button>
     </div>
 </div>
