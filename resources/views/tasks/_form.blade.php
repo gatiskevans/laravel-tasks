@@ -9,7 +9,6 @@
         @enderror
     </div>
 
-
     <div class="mb-4">
         <label class="block text-grey-darker text-sm font-bold mb-2">Content</label>
         <textarea class=" border rounded w-full py-2 px-3 text-grey-darker" name="content">{{ old('content', $task->content ?? '') }}</textarea>
@@ -20,8 +19,11 @@
 
     <div class="mb-4">
         <label for="status" class="block text-grey-darker text-sm font-bold mb-2">Status</label>
-        <input class=" border rounded w-full py-2 px-3 text-grey-darker" type="text"
-               name="status" id="status" value="{{ old('status', $task->status ?? '') }}">
+        <select class=" border rounded w-full py-2 px-3 text-grey-darker" type="text"
+                name="status" id="status">
+            <option>In Progress</option>
+            <option>Completed</option>
+        </select>
         @error('status')
             <p style="color: red">{{ $message }}</p>
         @enderror
