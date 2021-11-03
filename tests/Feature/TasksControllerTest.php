@@ -4,9 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class TasksControllerTest extends TestCase
@@ -16,7 +14,7 @@ class TasksControllerTest extends TestCase
 
     public function test_can_visit_tasks_page(): void
     {
-        /** @var Authenticatable $user */
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -28,7 +26,7 @@ class TasksControllerTest extends TestCase
 
     public function test_can_visit_create_page(): void
     {
-        /** @var Authenticatable $user */
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -39,7 +37,7 @@ class TasksControllerTest extends TestCase
 
     public function test_can_visit_edit_page(): void
     {
-        /** @var Authenticatable $user */
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -53,7 +51,7 @@ class TasksControllerTest extends TestCase
 
     public function test_can_edit_task(): void
     {
-        /** @var Authenticatable $user */
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -66,7 +64,7 @@ class TasksControllerTest extends TestCase
 
     public function test_can_store_task(): void
     {
-        /** @var Authenticatable $user */
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -79,7 +77,7 @@ class TasksControllerTest extends TestCase
 
     public function test_can_delete_task(): void
     {
-        /** @var Authenticatable $user */
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -88,5 +86,27 @@ class TasksControllerTest extends TestCase
 
         $response = $this->delete(route('tasks.destroy', ['task' => $task]));
         $response->assertStatus(200);
+        $this->assertDeleted('tasks', [
+            'id' => $task->id
+        ]);
+    }
+
+    public function test_completed_at_status(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $task = Task::factory()->create([
+            'user_id' => $user->id
+        ]);
+        $this->followingRedirects();
+
+        $response = $this->post(route('tasks.complete', ['task' => $task]));
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'completed_at' => now()
+        ]);
     }
 }

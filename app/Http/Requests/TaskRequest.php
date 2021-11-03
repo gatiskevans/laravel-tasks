@@ -15,8 +15,7 @@ class TaskRequest extends FormRequest
     {
         return [
             'title' => ['required', 'min:3', 'max:255'],
-            'content' => ['required', 'min:3', 'max:255'],
-            'status' => ['required', 'min:2', 'max:255']
+            'content' => ['required', 'min:3', 'max:255']
         ];
     }
 }
