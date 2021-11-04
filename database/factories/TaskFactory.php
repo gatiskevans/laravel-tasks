@@ -12,7 +12,8 @@ class TaskFactory extends Factory
             'user_id' => null,
             'title' => $this->faker->sentence,
             'content' => $this->faker->paragraph,
-            'completed_at' => null
+            'completed_at' => null,
+            'deleted_at' => null
         ];
     }
 }
