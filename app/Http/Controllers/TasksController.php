@@ -11,7 +11,7 @@ class TasksController extends Controller
 {
     public function index(): View
     {
-        return view('tasks.index', ['tasks' => Task::all()]);
+        return view('tasks.index', ['tasks' => auth()->user()->tasks()->get()]);
     }
 
     public function create(): View
@@ -21,11 +21,16 @@ class TasksController extends Controller
 
     public function store(TaskRequest $request): RedirectResponse
     {
-        (new Task([
+        $task = (new Task([
             'title' => $request->get('title'),
             'content' => $request->get('content'),
-            'status' => $request->get('status')
-        ]))->save();
+        ]));
+
+        $task->user()->associate(auth()->user());
+        //gives task to authorised user
+
+        $task->save();
+
         return redirect()->route('tasks.index');
     }
 
@@ -39,7 +44,6 @@ class TasksController extends Controller
         $task->update([
             'title' => $request->get('title'),
             'content' => $request->get('content'),
-            'status' => $request->get('status')
         ]);
         return redirect()->route('tasks.edit', $task);
     }
@@ -48,5 +52,14 @@ class TasksController extends Controller
     {
         $task->delete();
         return redirect()->route('tasks.index');
+    }
+
+    public function complete(Task $task): RedirectResponse
+    {
+        $task->update([
+            'id' => $task->id,
+            'completed_at' => $task->completed_at ? null : now()
+        ]);
+        return redirect()->back();
     }
 }
