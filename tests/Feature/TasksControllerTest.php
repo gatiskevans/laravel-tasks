@@ -41,7 +41,9 @@ class TasksControllerTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $task = Task::factory()->create();
+        $task = Task::factory()->create([
+            'user_id' => $user->id
+        ]);
 
         $response = $this->get(route('tasks.edit', ['task' => $task]));
         $response->assertStatus(200);
@@ -55,7 +57,9 @@ class TasksControllerTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $task = Task::factory()->create();
+        $task = Task::factory()->create([
+            'user_id' => $user->id
+        ]);
         $this->followingRedirects();    //tells test the method will return redirect, to avoid 302 redirect error
 
         $response = $this->put(route('tasks.update', ['task' => $task]));
@@ -68,7 +72,9 @@ class TasksControllerTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $task = Task::factory()->create();
+        $task = Task::factory()->create([
+            'user_id' => $user->id
+        ]);
         $this->followingRedirects();
 
         $response = $this->post(route('tasks.store', ['task' => $task]));
@@ -81,7 +87,9 @@ class TasksControllerTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $task = Task::factory()->create();
+        $task = Task::factory()->create([
+            'user_id' => $user->id
+        ]);
         $this->followingRedirects();
 
         $response = $this->delete(route('tasks.destroy', ['task' => $task]));
