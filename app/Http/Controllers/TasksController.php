@@ -54,6 +54,12 @@ class TasksController extends Controller
         return redirect()->route('tasks.index');
     }
 
+    public function deleteTask(Task $task): RedirectResponse
+    {
+        $task->forceDelete();
+        return redirect()->route('tasks.index');
+    }
+
     public function complete(Task $task): RedirectResponse
     {
         $task->update([

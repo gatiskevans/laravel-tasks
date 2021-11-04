@@ -81,7 +81,7 @@ class TasksControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_can_delete_task(): void
+    public function test_can_soft_delete_task(): void
     {
         /** @var User $user */
         $user = User::factory()->create();
@@ -94,8 +94,27 @@ class TasksControllerTest extends TestCase
 
         $response = $this->delete(route('tasks.destroy', ['task' => $task]));
         $response->assertStatus(200);
-        $this->assertDeleted('tasks', [
+        $this->assertSoftDeleted('tasks', [
             'id' => $task->id
+        ]);
+    }
+
+    public function test_can_delete_task(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $task = Task::factory()->create([
+            'user_id' => $user->id
+        ]);
+        $this->followingRedirects();
+
+        $response = $this->delete(route('tasks.deleteTask', ['task' => $task]));
+        $response->assertStatus(200);
+        $this->assertDeleted('tasks', [
+            'id' => $task->id,
+            'deleted_at' => now()
         ]);
     }
 
@@ -110,7 +129,7 @@ class TasksControllerTest extends TestCase
         ]);
         $this->followingRedirects();
 
-        $response = $this->post(route('tasks.complete', ['task' => $task]));
+        $response = $this->put(route('tasks.complete', ['task' => $task]));
         $response->assertStatus(200);
         $this->assertDatabaseHas('tasks', [
             'id' => $task->id,

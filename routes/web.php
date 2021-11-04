@@ -12,8 +12,12 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::resource('tasks', TasksController::class)->middleware('auth');
-Route::post('tasks/{task}/complete', [TasksController::class, 'complete'])
+Route::put('tasks/{task}/complete', [TasksController::class, 'complete'])
     ->middleware('auth')
     ->name('tasks.complete');
+
+Route::delete('tasks', [TasksController::class, 'deleteTask'])
+    ->middleware('auth')
+    ->name('tasks.deleteTask');
 
 require __DIR__.'/auth.php';

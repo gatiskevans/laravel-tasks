@@ -1,5 +1,6 @@
 <form action="{{ route('tasks.complete', $task) }}" method="post">
     @csrf
+    @method('PUT')
 
     <label for="{{ $task->id }}">Complete: </label>
 
