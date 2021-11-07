@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TaskFactory extends Factory
 {
-    public function definition()
+    public function definition(): array
     {
         return [
             'user_id' => null,
