@@ -11,7 +11,12 @@ class TasksController extends Controller
 {
     public function index(): View
     {
-        return view('tasks.index', ['tasks' => auth()->user()->tasks()->get()]);
+        return view('tasks.index', ['tasks' => Task::where('user_id', auth()->user()->id)->paginate(10)]);
+    }
+
+    public function trash(): View
+    {
+        return view('tasks.trash', ['tasks' => Task::onlyTrashed()->get()]);
     }
 
     public function create(): View
@@ -34,7 +39,7 @@ class TasksController extends Controller
         return redirect()->route('tasks.index');
     }
 
-    public function edit(Task $task)
+    public function edit(Task $task): View
     {
         return view('tasks.edit', ['task' => $task]);
     }
@@ -57,7 +62,14 @@ class TasksController extends Controller
     public function deleteTask(Task $task): RedirectResponse
     {
         $task->forceDelete();
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.trash');
+    }
+
+    public function restoreTask(Task $task): RedirectResponse
+    {
+        $task->restore();
+
+        return redirect()->route('tasks.trash');
     }
 
     public function complete(Task $task): RedirectResponse

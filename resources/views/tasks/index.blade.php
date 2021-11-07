@@ -15,11 +15,11 @@
                         @if($task->completed_at)<s style="color: darkgreen">@endif
                             <h3><b>{{ $task->title }}</b></h3>
                             <p><b>{{ $task->content }}</b></p>
-                        @if($task->completed_at)</s>@endif
+                            @if($task->completed_at)</s>@endif
 
-                            @if($task->completed_at)
-                                <p><b style="color: green">Completed At: {{ $task->completed_at }}</b></p>
-                            @endif
+                        @if($task->completed_at)
+                            <p><b style="color: green">Completed At: {{ $task->completed_at }}</b></p>
+                        @endif
 
                         @include('tasks._completeForm', $task)
 
@@ -27,9 +27,15 @@
                         <form method="post" action="{{ route('tasks.destroy', $task) }}">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" onclick="return confirm('Are You Sure?')"><b style="color: red">DELETE</b></button>
+                            <button type="submit" onclick="return confirm('Are You Sure?')"><b
+                                    style="color: red">DELETE</b></button>
                         </form><br/><br/>
                     @endforeach
+
+                    <span>
+                        {{ $tasks->links() }}
+                    </span>
+
                 </div>
             </div>
         </div>
